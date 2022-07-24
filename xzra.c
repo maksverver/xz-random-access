@@ -183,6 +183,11 @@ static void process(
   lzma_index *index = NULL;
   uint64_t memlimit = INDEX_MEMORY_LIMIT;
   ret = lzma_index_buffer_decode(&index, &memlimit, allocator, data, &in_pos, size);
+  if (ret == LZMA_MEMLIMIT_ERROR) {
+    fprintf(stderr, "Not enough memory for index! Need %lld bytes, but the limit is %lld bytes.\n",
+      (long long) memlimit, (long long)INDEX_MEMORY_LIMIT);
+    exit(1);
+  }
   assert(ret == LZMA_OK && index != NULL);
 
   process_with_index(
