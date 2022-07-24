@@ -179,7 +179,7 @@ static void process(
       footer_flags.backward_size < size - 2*LZMA_STREAM_HEADER_SIZE);
 
   size_t index_start_pos = size - LZMA_STREAM_HEADER_SIZE - footer_flags.backward_size;
-  size_t in_pos = size - LZMA_STREAM_HEADER_SIZE - footer_flags.backward_size;
+  size_t in_pos = index_start_pos;
   lzma_index *index = NULL;
   uint64_t memlimit = INDEX_MEMORY_LIMIT;
   ret = lzma_index_buffer_decode(&index, &memlimit, allocator, data, &in_pos, size);
