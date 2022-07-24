@@ -62,6 +62,7 @@ static lzma_ret decompress_block(
   if (ret == LZMA_OK) {
     // Block header looks good. Try to decode.
     lzma_stream stream = LZMA_STREAM_INIT;
+    stream.allocator = allocator;
     ret = lzma_block_decoder(&stream, &block);
     if (ret == LZMA_OK) {
       stream.next_in = data + offset + block.header_size;
