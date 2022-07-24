@@ -111,7 +111,7 @@ static void process_with_index(
     lzma_index_iter_init(&iter, index);
 
     if (lzma_index_iter_locate(&iter, offsets[i]) == true) {
-      fprintf(stderr, "Offset out of bounds: %lld!\n", i);
+      fprintf(stderr, "Offset out of bounds: %lld!\n", (long long) i);
       exit(1);
       return;
     }
@@ -122,7 +122,7 @@ static void process_with_index(
     // See how many offsets we can satisfy from this block.
     assert(offsets[i] >= offset);
     assert(offsets[i] - offset <= block_size);
-    int j = i + 1;
+    size_t j = i + 1;
     while (j < noffset && offsets[j] - offset < block_size) ++j;
 
     // How many bytes we need to decode. This is only part of the block.
@@ -201,10 +201,12 @@ int main(int argc, char *argv[]) {
   size_t noffset = argc - 2;
   int64_t *offsets = calloc(noffset, sizeof(*offsets));
   for (int i = 0; i < noffset; ++i) {
-    if (sscanf(argv[i + 2], "%lld", &offsets[i]) != 1) {
+    long long offset = 0;
+    if (sscanf(argv[i + 2], "%lld", &offset) != 1) {
       fprintf(stderr, "Failed to parse offset %d: %s\n", i + 1, argv[i + 2]);
       exit(1);
     }
+    offsets[i] = offset;
     if (i > 0 && offsets[i] < offsets[i - 1]) {
       fprintf(stderr, "Offsets must be nondecreasing!\n");
       exit(1);

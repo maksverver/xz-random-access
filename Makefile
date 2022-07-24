@@ -1,4 +1,4 @@
-CFLAGS=-Og -g
+CFLAGS=-Og -g -Wall -Wextra -Wno-sign-compare -Wno-pointer-sign
 LDLIBS=-llzma
 
 all: xzra
